@@ -27,6 +27,22 @@ def load_data(source_file, total_images, length, width):
 
 
 """
+This method returns the labels of training data.
+Params:
+    Takes path of the input file
+returns:
+    list of all the labels
+"""
+
+def load_label(source_file):
+    label_file = open(source_file)
+    label_lines = label_file.readlines()
+    labels = []
+    for i in range(len(label_lines)):
+        labels.append(label_lines[i])
+    return labels
+
+"""
 This method requires entire data passed in list, and will return list of numpy array
 Params:
     digit_data = list
@@ -61,7 +77,7 @@ def matrix_transformation(digit_data, length, width):
 
 
 """
-TESTER FUNCTION - NEESDS TO BE DELETED BY END
+TESTER FUNCTION - NEEDS TO BE DELETED AT THE END
 """
 def matrix_transformation_test(digit_data, length, width):
     single_data_length = len(digit_data)
