@@ -74,23 +74,3 @@ def matrix_transformation(image_data, length, width):
         final_data.append(mat)   
         
     return final_data
-
-"""
-TESTER FUNCTION - NEEDS TO BE DELETED AT THE END
-"""
-def matrix_transformation_test(digit_data, length, width):
-    single_data_length = len(digit_data)
-
-    mat = np.zeros((length, width))
-
-    for j in range(single_data_length):
-        single_line = digit_data[j]
-        single_line_length = len(single_line)
-    
-        for k in range(single_line_length):
-            if(single_line[k] == '+'):
-                mat[j][k] = 1
-            if(single_line[k] == '#'):
-                mat[j][k] = 2
-        
-    return mat

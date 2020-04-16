@@ -1,16 +1,20 @@
+"""
+Image is in format (width length) : that is for face there are 
+0 columns and 70 rows.
+"""
 import probabilityCalculation as pc
 import driverFile as df
 import readingData as rd
 
-DIGIT_TRAIN_IMAGES = r'C:/Users/Dell/projectcs520/data/digitdata/trainingimages'
-DIGIT_TRAIN_LABELS = r'C:/Users/Dell/projectcs520/data/digitdata/traininglabels'
-DIGIT_TEST_IMAGES = r'C:/Users/Dell/projectcs520/data/digitdata/testimages'
-DIGIT_TEST_LABELS = r'C:/Users/Dell/projectcs520/data/digitdata/testlabels'
+DIGIT_TRAIN_IMAGES = r'data/digitdata/trainingimages'
+DIGIT_TRAIN_LABELS = r'data/digitdata/traininglabels'
+DIGIT_TEST_IMAGES = r'data/digitdata/testimages'
+DIGIT_TEST_LABELS = r'data/digitdata/testlabels'
 
-FACE_TRAIN_IMAGES = r'C:/Users/Dell/projectcs520/data/facedata/facedatatrain'
-FACE_TRAIN_LABELS = r'C:/Users/Dell/projectcs520/data/facedata/facedatatrainlabels'
-FACE_TEST_IMAGES = r'C:/Users/Dell/projectcs520/data/facedata/facedatatest'
-FACE_TEST_LABELS = r'C:/Users/Dell/projectcs520/data/facedata/facedatatestlabels'
+FACE_TRAIN_IMAGES = r'data/facedata/facedatatrain'
+FACE_TRAIN_LABELS = r'data/facedata/facedatatrainlabels'
+FACE_TEST_IMAGES = r'data/facedata/facedatatest'
+FACE_TEST_LABELS = r'data/facedata/facedatatestlabels'
 
 DIMENSIONS_DIGIT = (28, 28)
 DIMENSIONS_FACE = (60, 70)

@@ -1,4 +1,3 @@
-import math
 """
 Formula :-
 P(Y|X) = P(X|Y) * P(Y) / Normalization
@@ -45,8 +44,9 @@ Structure would be as following:
 Params:
     dataWithLabel: dataset(Training dataset with labels and features)
     allLabels: Number of possible labels (distinct labels)
-    totalFeatures: number of features image has
+    feature_dim: number of features image has (in tuple form)
     length, width : dimension of image(pixel format)
+
 """
 
 def training_Bayesian(dataWithLabel, allLabels, feature_dim, length, width):
@@ -79,6 +79,24 @@ def training_Bayesian(dataWithLabel, allLabels, feature_dim, length, width):
             
     return training_Data
 
+"""
+Function which calculates Final Probability. Wrote here because we will
+need this while training and testing. Common function.
+
+params:
+    dataWithLabel: dataset(Training dataset with labels and features)
+    allLabels: Number of possible labels (distinct labels)
+    prior_prob : Calculated before call 
+            (Will get calculated once while training)
+            (While testing we will use the same returned by training)
+    traininDict : likelihood probability (which we got after training)
+    
+returns:
+    (first calculates probabiliy of each feature and then finds maximum
+    and append to the list)
+    
+    list of predicted values
+"""
 def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
     predicted_value = []
     

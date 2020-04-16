@@ -1,5 +1,4 @@
 import numpy as np
-import math
 """
 Feature of particular image of particular position & index starts from (0,0)
 e.g.:
