@@ -1,26 +1,24 @@
 import readingData as rd
 import featureExtraction as fext
 
-def createDataWithLabel():
-    file_path_images = r'data/digitdata/trainingimages'
-    file_path_labels = r'data/digitdata/traininglabels'
+def createDataWithLabel(phase, file_path_images, loaded_labels, total_images,feature_dim, length, width):
     
-    length, width = 28, 28
-    
-    loaded_data = rd.load_data(file_path_images, 5000, length, width)
-    loaded_labels = rd.load_label(file_path_labels)
-    
+    loaded_data = rd.load_data(file_path_images, total_images, length, width)
     matrices = rd.matrix_transformation(loaded_data, length, width)
     
-    dataWithLabel = {}
+    processedData = {}
     
     for each_matrix in range(len(matrices)):
         temp = {}
         test = matrices[each_matrix]
         
         label = loaded_labels[each_matrix]
-        feature = fext.all_at_once(test)
+        feature = fext.all_at_once(test, length, width, feature_dim)
         
-        temp = {'label' : label, 'features' : feature}
-        dataWithLabel[each_matrix] = temp
-    return dataWithLabel
+        if(phase == 'training'):
+            temp = {'label' : label, 'features' : feature}
+        else:
+            temp = {'features' : feature}
+        processedData[each_matrix] = temp
+        
+    return processedData

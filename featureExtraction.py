@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 """
 Feature of particular image of particular position & index starts from (0,0)
 e.g.:
@@ -14,12 +14,12 @@ returns:
     Numpy array of the specific feature
 """
 
-def particular_feature(test, i, j):
-    feature = np.zeros((4, 4))
+def particular_feature(test, i, j,size):
+    feature = np.zeros((size, size))
     temp_row = 0
-    for row in range(4*i, 4*(i+1)):
+    for row in range(size*i, size*(i+1)):
         temp_col = 0
-        for column in range(4*j, 4*(j+1)):
+        for column in range(size*j, size*(j+1)):
             feature[temp_row][temp_col] = test[row][column]
             temp_col = temp_col + 1
         temp_row = temp_row + 1
@@ -67,11 +67,14 @@ calculates its gray and black pixel and returns the list of the features
 to the user.
 """
 
-def all_at_once(test):
+def all_at_once(test, length, width, feature_dim):
+    featureMatrixColumn = int(width/feature_dim[0])
+    featureMatrixRow = int(length/feature_dim[0])
     list_Feature = [] 
-    for i in range(0, 7):
-        for j in range(0, 7):
-            single_feature = particular_feature(test, i, j)
+    
+    for i in range(0, featureMatrixRow):
+        for j in range(0, featureMatrixColumn):
+            single_feature = particular_feature(test, i, j,feature_dim[0])
             gp , bp = calculation_feature(single_feature)
             list_Feature.append((gp, bp))
     

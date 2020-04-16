@@ -1,7 +1,4 @@
-import featureExtraction as fext
-import readingData as rd
-import driverFile as df
-
+import math
 """
 Formula :-
 P(Y|X) = P(X|Y) * P(Y) / Normalization
@@ -13,14 +10,14 @@ Let's say F1=7
 Then calculate given F1=7; how many images from dataset have F1 as 7
 
 So, P(F1=7|Y=1)
-                        
-"""
-#%%
-dataWithLabel = df.createDataWithLabel()
-#%%
 
-def calculatePrior(value):
-    file_path_labels = r'data/digitdata/traininglabels'
+method: calculatePrior:
+    params:
+        file_path_labels = training data's labels to calculate prior probability.
+        value = which label's prior probability you want to find
+"""
+
+def calculatePrior(file_path_labels, value):
     count_dict = {}
     
     for i in range(10):
@@ -38,25 +35,76 @@ def calculatePrior(value):
     
     return value_count, total_count
 
-def likelihood(ftr_indx, ftr_val, label, total_label):
-    count = 0
-    against = 0
+"""
+Training should return me data structure which will help me build 
+the likelihood probability very efficiently.
+
+Structure would be as following:
+    {label : all the possible features : possible values each feature can take : count }
+
+Params:
+    dataWithLabel: dataset(Training dataset with labels and features)
+    allLabels: Number of possible labels (distinct labels)
+    totalFeatures: number of features image has
+    length, width : dimension of image(pixel format)
+"""
+
+def training_Bayesian(dataWithLabel, allLabels, feature_dim, length, width):
+    row_ft = width/feature_dim[0]
+    column_ft = length/feature_dim[0]
+    
+    totalFeatures = int(row_ft * column_ft)
+    possibleValues = pow(feature_dim[0], 2)
+    
+    training_Data = {}
+    for i in range(allLabels):
+        featureDict = {}
+        for j in range(1, totalFeatures+1):
+            possibleValues_Dict = {}
+            for k in range(0, possibleValues+1):
+                possibleValues_Dict[k] = 0
+            featureDict[j] = possibleValues_Dict
+        training_Data[i] = featureDict
+
+    for i in range(len(dataWithLabel)):
+        temp_Data = dataWithLabel[i]
+        temp_features = temp_Data['features']
+        temp_label = int(temp_Data['label'])
+    
+        for j in range(len(temp_features)):
+            cell_count = temp_features[j][0] + temp_features[j][1]
+            count = training_Data[temp_label][j+1][cell_count]
+            count = count + 1
+            training_Data[temp_label][j+1][cell_count] = count
+            
+    return training_Data
+
+def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
+    predicted_value = []
     
     for i in range(len(dataWithLabel)):
-        curr_pointer = dataWithLabel[i]
-        if (int(curr_pointer['label']) == label):
-            
-            raw_info = curr_pointer['features'][ftr_indx]
-            curr_feature = int(raw_info[0] + raw_info[1])
-            
-            if (curr_feature == ftr_val):
-                count = count + 1
-            else:
-                against = against + 1
-    if(count!=0):
-        likelihood_probability = count / total_label
-    else:
-        #Smoothing
-        likelihood_probability = 0.001
-
-    return likelihood_probability
+        test = dataWithLabel[i]
+        feature_test = test['features']
+        
+        likelihood = {}
+        final_prob = {}
+        
+        for each_label in range(allLabels):
+            probability = 1
+            for each_feature in range(len(feature_test)):
+                feature_sum = int(feature_test[each_feature][0] + feature_test[each_feature][1])
+                val = trainingDict[each_label][each_feature+1][feature_sum] / prior_prob[each_label][0]
+                if(val!=0.0):
+                    probability = probability * val
+                else:
+                    probability = probability * 0.001
+            likelihood[each_label] = probability
+        
+        alpha = sum(likelihood.values())
+        for index in range(len(likelihood)):
+            prior = (prior_prob[index][0] / prior_prob[index][1])
+            final_prob[index] = (likelihood[index] / alpha) * prior
+        
+        predicted_value.append(max(final_prob, key = final_prob.get))
+    
+    return predicted_value

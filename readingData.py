@@ -13,17 +13,17 @@ Returns:
 
 def load_data(source_file, total_images, length, width):
     
-    digitFile = open(source_file)
-    data_line = digitFile.readlines()
-    digit_data= []
+    datasetFile = open(source_file)
+    data_line = datasetFile.readlines()
+    image_data= []
 
     for i in range(total_images):
         temp_data = []
         for j in range(length*i, length*(i+1)):
             temp_data.append(data_line[j])
-        digit_data.append(temp_data)
+        image_data.append(temp_data)
         
-    return digit_data
+    return image_data
 
 
 """
@@ -39,13 +39,13 @@ def load_label(source_file):
     label_lines = label_file.readlines()
     labels = []
     for i in range(len(label_lines)):
-        labels.append(label_lines[i])
+        labels.append(label_lines[i].strip())
     return labels
 
 """
 This method requires entire data passed in list, and will return list of numpy array
 Params:
-    digit_data = list
+    image_data = list
     length = length of pixel
     width = length of pixel
 Returns:
@@ -53,13 +53,13 @@ Returns:
     And array is representation of given data
 """
 
-def matrix_transformation(digit_data, length, width):
-    total_data = len(digit_data)
+def matrix_transformation(image_data, length, width):
+    total_data = len(image_data)
     final_data = []
 
     for i in range(total_data):
         mat = np.zeros((length, width))
-        single_image = digit_data[i]
+        single_image = image_data[i]
         single_image_length = len(single_image)
     
         for j in range(single_image_length):
@@ -74,7 +74,6 @@ def matrix_transformation(digit_data, length, width):
         final_data.append(mat)   
         
     return final_data
-
 
 """
 TESTER FUNCTION - NEEDS TO BE DELETED AT THE END
