@@ -2,9 +2,8 @@
 Image is in format (width, length) : that is for face there are 
 0 columns and 70 rows.
 """
-import probabilityCalculation as pc
-import driverFile as df
-import readingData as rd
+import naiveBayesianHelper as bh
+from pathlib import Path
 
 DIGIT_TRAIN_IMAGES = r'data/digitdata/trainingimages'
 DIGIT_TRAIN_LABELS = r'data/digitdata/traininglabels'
@@ -41,62 +40,23 @@ path_dict = {
 true_labels takes label file and stores true labels, which will be used
 later to compare with predicted labels. 
 """
-def do_Training(currentlyWorkingDS):
-    directory = path_dict[currentlyWorkingDS.lower()]
-
-    true_labels = rd.load_label(directory['paths'][1])
-    allLabels = len(list(set(true_labels)))
-    total_images = len(true_labels)
-
-    dataWithLabel = df.createDataWithLabel('training',directory['paths'][0], true_labels, total_images, directory['featuretuple'], directory['dimensions'][1], directory['dimensions'][0])
-    trainingDict = pc.training_Bayesian(dataWithLabel,allLabels, directory['featuretuple'], directory['dimensions'][1], directory['dimensions'][0])
-
-    prior_prob = {}
-    for each_label in range(allLabels):
-        val, tot = pc.calculatePrior(directory['paths'][1], each_label)
-        prior_prob[each_label] = (val, tot)
-
-    predicted_value = pc.posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict)
-
-    diff = 0
-    for i in range(len(true_labels)):
-        if(int(true_labels[i]) != predicted_value[i]):
-            diff = diff + 1
-    
-    accuracy = 100-((diff*100)/total_images)
-    
-    return accuracy, trainingDict, prior_prob
-
-def do_Testing(currentlyWorkingDS, prior_prob, trainingDict):
-    directory = path_dict[currentlyWorkingDS.lower()]
-
-    true_labels = rd.load_label(directory['paths'][3])
-    allLabels = len(list(set(true_labels)))
-    total_images = len(true_labels)
-
-    processedData = df.createDataWithLabel('testing',directory['paths'][2], true_labels, total_images, directory['featuretuple'], directory['dimensions'][1], directory['dimensions'][0])
-    predicted_value = pc.posteriorProbability(processedData, allLabels, prior_prob, trainingDict)
-
-    diff = 0
-    for i in range(len(true_labels)):
-        if(int(true_labels[i]) != predicted_value[i]):
-            diff = diff + 1
-    
-    accuracy = 100-((diff*100)/total_images)
-    
-    return accuracy
-    
 currentlyWorkingDS = input("Bayesian N/W on which dataset?")
 if(currentlyWorkingDS.lower() not in path_dict.keys()):
     print("Key did not match to any dataset, check again")
 else:
-    print("Initializing Training on ", currentlyWorkingDS)
+    mname = "bayes_likelihood_"+currentlyWorkingDS.lower()+".pkl"
+    pname = "bayes_prior_"+currentlyWorkingDS.lower()+".pkl"
+    path = r"C:/Users/Dell/projectcs520/models/"
+    checkExistL = Path(path+mname)
+    checkExistP = Path(path+pname)
     
-    accuracyTraining, trainingMat, prior_prob = do_Training(currentlyWorkingDS)
+    if(checkExistL.exists() and checkExistP.exists()):
+        print("Model already exists")
+    else:
+        print("Initializing Training on ", currentlyWorkingDS)
+        bh.do_training(path_dict[currentlyWorkingDS.lower()], mname,pname, path)
+        print("Training has been done and model has been saved with name: ",mname)
     
-    print("Training done with accuracy ",accuracyTraining)
+    print("===========================")
     print("Initializing Testing")
-    
-    accuracyTesting = do_Testing(currentlyWorkingDS, prior_prob, trainingMat)
-    
-    print("Accuracy in testing data is ",accuracyTesting)
+    bh.do_testing(path+mname,path+pname,path_dict[currentlyWorkingDS.lower()])

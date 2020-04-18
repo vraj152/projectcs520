@@ -36,7 +36,7 @@ currentlyWorkingDS = input("Perceptron Algorithm on which dataset?")
 if(currentlyWorkingDS.lower() not in path_dict.keys()):
     print("Key did not match to any dataset, check again")
 else:
-    mname = currentlyWorkingDS.lower()+".pkl"
+    mname = "percep_"+currentlyWorkingDS.lower()+".pkl"
     path = r"C:/Users/Dell/projectcs520/models/"
     checkExist = Path(path+mname)
     
@@ -49,4 +49,4 @@ else:
     
     print("===========================")
     print("Initializing Testing")
-    ph.do_testing(mname,path_dict[currentlyWorkingDS.lower()])
+    ph.do_testing(path+mname,path_dict[currentlyWorkingDS.lower()])
