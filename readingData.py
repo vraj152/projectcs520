@@ -74,3 +74,21 @@ def matrix_transformation(image_data, length, width):
         final_data.append(mat)   
         
     return final_data
+
+
+def matrix_transformation_test(image_data, length, width):
+    mat = np.zeros((length, width))
+    single_image = image_data
+    single_image_length = len(single_image)
+
+    for j in range(single_image_length):
+        single_line = single_image[j]
+        single_line_length = len(single_line)
+    
+        for k in range(single_line_length):
+            if(single_line[k] == '+'):
+                mat[j][k] = 1
+            if(single_line[k] == '#'):
+                mat[j][k] = 2
+    
+    return mat

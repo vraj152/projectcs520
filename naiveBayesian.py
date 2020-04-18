@@ -1,5 +1,5 @@
 """
-Image is in format (width length) : that is for face there are 
+Image is in format (width, length) : that is for face there are 
 0 columns and 70 rows.
 """
 import probabilityCalculation as pc
