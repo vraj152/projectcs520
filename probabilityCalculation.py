@@ -106,7 +106,7 @@ def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
         
         likelihood = {}
         final_prob = {}
-        
+
         for each_label in range(allLabels):
             probability = 1
             for each_feature in range(len(feature_test)):
@@ -119,6 +119,7 @@ def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
             likelihood[each_label] = probability
         
         alpha = sum(likelihood.values())
+
         for index in range(len(likelihood)):
             prior = (prior_prob[index][0] / prior_prob[index][1])
             final_prob[index] = (likelihood[index] / alpha) * prior

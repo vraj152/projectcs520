@@ -17,7 +17,7 @@ FACE_TEST_LABELS = r'data/facedata/facedatatestlabels'
 
 DIMENSIONS_DIGIT = (28, 28)
 DIMENSIONS_FACE = (60, 70)
-FEATURE_DIGIT_TUPLE = (4, 4)
+FEATURE_DIGIT_TUPLE = (1, 1)
 FEATURE_FACE_TUPLE = (5, 5)
 
 path_dict = {
@@ -40,7 +40,9 @@ path_dict = {
 true_labels takes label file and stores true labels, which will be used
 later to compare with predicted labels. 
 """
-currentlyWorkingDS = input("Bayesian N/W on which dataset?")
+currentlyWorkingDS = input("Bayesian N/W on which dataset?: ")
+splitParameter = int(input("Partition(Testing)?: "))/100
+
 if(currentlyWorkingDS.lower() not in path_dict.keys()):
     print("Key did not match to any dataset, check again")
 else:
@@ -54,9 +56,9 @@ else:
         print("Model already exists")
     else:
         print("Initializing Training on ", currentlyWorkingDS)
-        bh.do_training(path_dict[currentlyWorkingDS.lower()], mname,pname, path)
+        bh.do_training(path_dict[currentlyWorkingDS.lower()], mname,pname, path, splitParameter)
         print("Training has been done and model has been saved with name: ",mname)
     
     print("===========================")
     print("Initializing Testing")
-    bh.do_testing(path+mname,path+pname,path_dict[currentlyWorkingDS.lower()])
+    bh.do_testing(path+mname,path+pname,path_dict[currentlyWorkingDS.lower()], splitParameter)
