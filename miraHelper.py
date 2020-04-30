@@ -36,8 +36,15 @@ def do_training(pathDict, totalEpoch, mname, path):
             
             if(predicted_label != curr_label):
                 error = error + 1
-                weights[:,curr_label] = weights[:,curr_label] + temp_numpy[:,0]
-                weights[:,predicted_label] = weights[:,predicted_label] - temp_numpy[:,0]
+                weight_Diff = (weights[:,predicted_label] - weights[:,curr_label])
+                dotProduct_feature = np.dot(temp_numpy.T, temp_numpy)
+                
+                tau_numerator = np.dot(weight_Diff.T, temp_numpy) + 1
+                tau_denom = 2 * dotProduct_feature
+                tau = tau_numerator / tau_denom
+                
+                weights[:,curr_label] = weights[:,curr_label] +  (tau * temp_numpy[:,0])
+                weights[:,predicted_label] = weights[:,predicted_label] - (tau * temp_numpy[:,0])
         accuracy = 100-((error/total_images)*100)
         print("Accuracy: ",accuracy)
         if (accuracy == 100.0):

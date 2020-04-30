@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="bootstrap.min.css">
 
     <title>HWD Perceptron</title>
+	<link rel="shortcut icon" href="C:/Users/Dell/projectcs520/frontEnd/UniLogo.png" type="image/x-icon">
   </head>
 
   <body>
@@ -21,16 +22,15 @@
       .border-2 { border-width:2px !important; }      
     </style>
 
-    <p class="lead bg-primary text-white p-3 mb-2" align="center">Project CS520</p>
+    <p class="lead bg-primary text-white p-3 mb-2" align="center">Project CS520 by Vraj and Parva</p>
 
     <p class="lead ml-3 mr-3">
-      This demo uses a Perceptron Neural Network to recognize the digit that you
-      draw in the box below. Press the Recognize button after you are done drawing
-      or the Clear button if you want to start over.
+      This demo is for CS520 course. It recognizes the digit that you draw in below box using various algorithms like Perceptron Neural Network, Bayesian Network and MIRA. First select the algorithm and then press the "Recognize" button or the "Clear" button if you want to start over. Flask webserver is used to make this client-server architecture.
     </p>
-    <div class="container-fluid"> Choose algorithm:
-        <p class="lead ml-3 mr-3">Bayesian</p>
-        <p class="lead ml-3 mr-3">Perceptron</p>
+    <div class="container-fluid"> Choose algorithm: <br>
+        <p class="lead ml-3 mr-3" style="display: inline"> <input type="radio" id="bayesian" name="algoName" value="bayesian" > Bayesian</p>
+        <p class="lead ml-3 mr-3" style="display: inline"> <input type="radio" id="perceptron" name="algoName" value="perceptron"> Perceptron</p>
+		<p class="lead ml-3 mr-3" style="display: inline"> <input type="radio" id="mira" name="algoName" value="mira"> MIRA</p>
     </div>
     <div class="container-fluid">
       <div class="row">
@@ -215,6 +215,19 @@
       //then, uses the REST API to call the Perceptron Neural Network server to recognize the digit
       function doRecognize()
       {
+		var radios = document.getElementsByName('algoName');
+		var noneSelected = 0;
+		var algoName ='';
+		for(i = 0; i < radios.length; i++){
+			if(radios[i].checked){
+				noneSelected++;
+				algoName = radios[i].value
+			}	
+		}
+		if(noneSelected==0){
+			alert("Select at least one algorithm!");
+		}
+		
         //convert RGBA image to a grayscale array, then compute bounding rectangle and center of mass  
         var imgData = ctx.getImageData(0, 0, 280, 280);
         grayscaleImg = imageDataToGrayscale(imgData);
@@ -289,7 +302,8 @@
           window.scrollBy(0, right_box_y);
 
         //perform async REST call
-        REST_CALL = REST_API + s;
+        REST_CALL = REST_API + s + "&algo=" + algoName;
+		console.log(REST_CALL)
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", REST_CALL, true);
         xhttp.onload = function (e)
