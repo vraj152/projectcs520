@@ -99,7 +99,6 @@ returns:
 """
 def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
     predicted_value = []
-    
     for i in range(len(dataWithLabel)):
         test = dataWithLabel[i]
         feature_test = test['features']
@@ -119,11 +118,13 @@ def posteriorProbability(dataWithLabel, allLabels, prior_prob, trainingDict):
             likelihood[each_label] = probability
         
         alpha = sum(likelihood.values())
-
+        
         for index in range(len(likelihood)):
             prior = (prior_prob[index][0] / prior_prob[index][1])
-            final_prob[index] = (likelihood[index] / alpha) * prior
-        
+            if(alpha!=0.0):
+                final_prob[index] = (likelihood[index] / alpha) * prior
+            else:
+                final_prob[index] = likelihood[index] * prior
         predicted_value.append(max(final_prob, key = final_prob.get))
     
     return predicted_value
