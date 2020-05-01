@@ -44,7 +44,6 @@ def createDataWithLabel(phase, file_path_images, loaded_labels, total_images,fea
         else:
             temp = {'features' : feature}
         processedData[each_matrix] = temp
-    
     if(phase == 'training'):
         return processedData, y_train
     else:

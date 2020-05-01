@@ -3,7 +3,7 @@ import readingData as rd
 import numpy as np
 import pickle
 
-def do_training(pathDict, totalEpoch, mname, path):
+def do_training(pathDict, totalEpoch, mname, path, splitParameter):
     numberOfFeatures = int(pathDict['dimensions'][1] / pathDict['featuretuple'][0]) * int(pathDict['dimensions'][0]/ pathDict['featuretuple'][0])
     
     true_labels = rd.load_label(pathDict['paths'][1])
@@ -12,7 +12,7 @@ def do_training(pathDict, totalEpoch, mname, path):
     
     print("===========================")
     print("Reading data")
-    dataWithLabel, labels = df.createDataWithLabel('training',pathDict['paths'][0], true_labels, total_images, pathDict['featuretuple'], pathDict['dimensions'][1], pathDict['dimensions'][0],0)
+    dataWithLabel, labels = df.createDataWithLabel('training',pathDict['paths'][0], true_labels, total_images, pathDict['featuretuple'], pathDict['dimensions'][1], pathDict['dimensions'][0],splitParameter)
     print("===========================")
     print("Initializing training")
     
@@ -52,7 +52,7 @@ def do_training(pathDict, totalEpoch, mname, path):
     with open(path+mname,'wb') as file:
         pickle.dump(weights, file)
 
-def do_testing(mname, pathDict):
+def do_testing(mname, pathDict, splitParameter):
     numberOfFeatures = int(pathDict['dimensions'][1] / pathDict['featuretuple'][0]) * int(pathDict['dimensions'][0]/ pathDict['featuretuple'][0])
     learnedWeights = pickle.load(open(mname,"rb"))
 
@@ -61,7 +61,7 @@ def do_testing(mname, pathDict):
     
     print("===========================")
     print("Reading data")
-    dataWithoutLabel = df.createDataWithLabel('testing',pathDict['paths'][2], true_labels, total_images, pathDict['featuretuple'], pathDict['dimensions'][1], pathDict['dimensions'][0],0)
+    dataWithoutLabel = df.createDataWithLabel('testing',pathDict['paths'][2], true_labels, total_images, pathDict['featuretuple'], pathDict['dimensions'][1], pathDict['dimensions'][0],splitParameter)
     print("===========================")
     print("Initializing testing")
     

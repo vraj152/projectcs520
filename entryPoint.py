@@ -2,6 +2,7 @@ import perceptronHelper as ph
 import miraHelper as mh
 import naiveBayesianHelper as bh
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 DIGIT_TRAIN_IMAGES = r'data/digitdata/trainingimages'
 DIGIT_TRAIN_LABELS = r'data/digitdata/traininglabels'
@@ -74,13 +75,13 @@ else:
         else:
             print("Initializing Training on ", currentlyWorkingDS)
             if(algorithmName == 'perceptron'):
-                ph.do_training(path_dict[currentlyWorkingDS.lower()], 170, mname,path)
+                ph.do_training(path_dict[currentlyWorkingDS.lower()], 170, mname,path, splitParameter)
             else:
-                mh.do_training(path_dict[currentlyWorkingDS.lower()], 170, mname,path)
+                mh.do_training(path_dict[currentlyWorkingDS.lower()], 170, mname,path, splitParameter)
             print("Training has been done and model has been saved with name: ",mname)
         print("===========================")
         print("Initializing Testing")
         if(algorithmName == 'perceptron'):
-            ph.do_testing(path+mname, path_dict[currentlyWorkingDS.lower()])
+            ph.do_testing(path+mname, path_dict[currentlyWorkingDS.lower()],splitParameter)
         else:
-            mh.do_testing(path+mname, path_dict[currentlyWorkingDS.lower()])
+            mh.do_testing(path+mname, path_dict[currentlyWorkingDS.lower()],splitParameter)
