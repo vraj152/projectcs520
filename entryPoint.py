@@ -2,7 +2,6 @@ import perceptronHelper as ph
 import miraHelper as mh
 import naiveBayesianHelper as bh
 from pathlib import Path
-import matplotlib.pyplot as plt
 
 DIGIT_TRAIN_IMAGES = r'data/digitdata/trainingimages'
 DIGIT_TRAIN_LABELS = r'data/digitdata/traininglabels'
